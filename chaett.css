@@ -1,0 +1,34 @@
+:root {
+    --cht--color-black: rgba(0, 0, 0, 0.9);
+    --cht--color-white: rgba(255, 255, 255, 0.9);
+    --cht--color-green-hue: 157;
+    --cht--color-orange-hue: 37;
+    --cht--color-red-hue: 344;
+    --cht--font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+}
+
+.cht-container.cht--light-theme {
+    --cht-fg: var(--cht--color-black);
+    --cht-bg: hsl(53, 25%, 94%);
+    --cht-yay: hsl(var(--cht--color-green-hue), 30%, 53%);
+    --cht-doh: hsl(var(--cht--color-orange-hue), 100%, 55%);
+    --cht-arg: hsl(var(--cht--color-orange-hue), 97%, 64%);
+    --cht-link: rgba(49, 120, 185, 0.925);
+}
+
+.cht-container.cht--dark-theme {
+    --cht-fg: var(--cht--color-white);
+    --cht-bg: hsl(330, 10%, 23%);
+    --cht-yay: hsl(var(--cht--color-green-hue), 30%, 63%);
+    --cht-doh: hsl(var(--cht--color-orange-hue), 100%, 65%);
+    --cht-arg: hsl(var(--cht--color-red-hue), 84%, 67%);
+    --cht-link: rgba(50, 121, 187, 0.925);
+}
+
+.cht-container {
+    background: var(--cht-bg);
+    color: var(--cht-fg);
+    font-family: var(--cht--font-family);
+}
