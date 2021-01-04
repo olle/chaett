@@ -8,6 +8,8 @@
     --cht--font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
         "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
         "Helvetica Neue", sans-serif;
+    --cht--container-fixed-top: 0;
+    --cht--container-fixed-bottom: 0;
     --cht--toggle-margin-top: 3rem;
 }
 
@@ -46,8 +48,8 @@
     background: pink;
     color: var(--cht-fg);
     font-family: var(--cht--font-family);
-    top: 0;
-    bottom: 0;
+    top: var(--cht--container-fixed-top);
+    bottom: var(--cht--container-fixed-bottom);
     right: 0;
     position: fixed;
 }
@@ -56,9 +58,13 @@
     margin-top: var(--cht--toggle-margin-top);
 }
 .cht-resize {
-    margin-top: var(--cht--toggle-margin-top);
     display: none;
     padding: 0;
+    height: 100%;
+    border: none;
+    cursor: ew-resize;
+    width: 0.4rem;
+    background: var(--cht-link);
 }
 .cht-resize > svg {
     margin: 0;
@@ -69,7 +75,7 @@
         display: none;
     }
     .cht-resize {
-        display: initial;
+        display: block;
     }
 }
 
