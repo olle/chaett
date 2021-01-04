@@ -4,9 +4,11 @@
     --cht--color-green-hue: 157;
     --cht--color-orange-hue: 37;
     --cht--color-red-hue: 344;
+    --cht--color-link-hue: 49;
     --cht--font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
         "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
         "Helvetica Neue", sans-serif;
+    --cht--toggle-margin-top: 3rem;
 }
 
 .cht-container.cht--light-theme {
@@ -15,7 +17,7 @@
     --cht-yay: hsl(var(--cht--color-green-hue), 30%, 53%);
     --cht-doh: hsl(var(--cht--color-orange-hue), 100%, 55%);
     --cht-arg: hsl(var(--cht--color-orange-hue), 97%, 64%);
-    --cht-link: rgba(49, 120, 185, 0.925);
+    --cht-link: rgba(var(--cht--color-link-hue), 120, 185, 0.925);
 }
 
 .cht-container.cht--dark-theme {
@@ -24,11 +26,62 @@
     --cht-yay: hsl(var(--cht--color-green-hue), 30%, 63%);
     --cht-doh: hsl(var(--cht--color-orange-hue), 100%, 65%);
     --cht-arg: hsl(var(--cht--color-red-hue), 84%, 67%);
-    --cht-link: rgba(50, 121, 187, 0.925);
+    --cht-link: rgba(var(--cht--color-link-hue), 121, 187, 0.925);
 }
 
+/* Micro reset */
+
 .cht-container {
-    background: var(--cht-bg);
+    box-sizing: border-box;
+}
+.cht-container *,
+.cht-container *::before,
+.cht-container *::after {
+    box-sizing: inherit;
+}
+
+/* Main layout. */
+
+.cht-container {
+    background: pink;
     color: var(--cht-fg);
     font-family: var(--cht--font-family);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+}
+
+.cht-toggle {
+    margin-top: var(--cht--toggle-margin-top);
+}
+.cht-resize {
+    margin-top: var(--cht--toggle-margin-top);
+    display: none;
+    padding: 0;
+}
+.cht-resize > svg {
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .cht-toggle {
+        display: none;
+    }
+    .cht-resize {
+        display: initial;
+    }
+}
+
+/* Icon styling */
+
+.cht-container .icon-tabler {
+    stroke: var(--cht-fg);
+}
+
+.cht-container.cht--light-theme .icon-tabler {
+    stroke-width: 1.4;
+}
+.cht-container.cht--dark-theme .icon-tabler {
+    stroke-width: 1.6;
 }

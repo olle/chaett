@@ -10,10 +10,29 @@
     const CLASS_CONTAINER = `${PREFIX}-container`;
     const CLASS_DARK_THEME = `${PREFIX}--${DARK_THEME}-theme`;
     const CLASS_LIGHT_THEME = `${PREFIX}--${LIGHT_THEME}-theme`;
+    const CLASS_TOGGLE = `${PREFIX}-toggle`;
+    const CLASS_RESIZE = `${PREFIX}-resize`;
+    const CLASS_WIDE = `${PREFIX}--is-wide`;
 
     const SELECTOR_CONTAINER = `.${CLASS_CONTAINER}`;
+    const SELECTOR_TOGGLE = `.${CLASS_TOGGLE}`;
+
+    const MEDIA_QUERY_DARK_THEME = "(prefers-color-scheme: dark)";
+
+    const ICON_TOGGLE = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+<path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" />
+<path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />
+</svg>`;
+    const ICON_RESIZE = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+<circle cx="12" cy="12" r="1" />
+<circle cx="12" cy="19" r="1" />
+<circle cx="12" cy="5" r="1" />
+</svg>`;
 
     const $body = window.document.querySelector("body");
+
     var $container = $body.querySelector(SELECTOR_CONTAINER);
 
     var store = {
@@ -25,13 +44,22 @@
         },
     };
 
-    var el = {
+    var view = {
         init: () => {
             if (!$container) {
                 $container = window.document.createElement("aside");
                 $container.classList.add(`${PREFIX}-container`);
                 $body.appendChild($container);
             }
+
+            $container.innerHTML = `
+<button class="${CLASS_TOGGLE}">${ICON_TOGGLE}</button>
+<button class="${CLASS_RESIZE}">${ICON_RESIZE}</button>`;
+
+            $toggle = $container.querySelector(SELECTOR_TOGGLE);
+            $toggle.addEventListener("click", evt => {
+                console.log("TOGGLE", evt);
+            });
         },
     };
 
@@ -41,15 +69,14 @@
             if (storedTheme) {
                 theme.set(storedTheme);
             } else {
-                var preferredTheme = window.matchMedia(
-                    "(prefers-color-scheme: dark)",
-                ).matches
+                var preferredTheme = window.matchMedia(MEDIA_QUERY_DARK_THEME)
+                    .matches
                     ? DARK_THEME
                     : LIGHT_THEME;
                 theme.set(preferredTheme);
             }
             window
-                .matchMedia("(prefers-color-scheme: dark)")
+                .matchMedia(MEDIA_QUERY_DARK_THEME)
                 .addEventListener("change", evt => {
                     var switchedTheme = evt.matches ? DARK_THEME : LIGHT_THEME;
                     theme.set(switchedTheme);
@@ -67,7 +94,7 @@
     };
 
     setTimeout(() => {
-        el.init();
+        view.init();
         theme.init();
     }, 42);
 
