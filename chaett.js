@@ -15,6 +15,8 @@
     const CLASS_TOGGLE = pfx("-toggle");
     const CLASS_RESIZE = pfx("-resize");
     const CLASS_MINIMIZE = pfx("-minimize");
+    const CLASS_PANEL = pfx("-panel");
+    const CLASS_HEADER = pfx("-header");
 
     const SELECTOR_CONTAINER = `.${CLASS_CONTAINER}`;
     const SELECTOR_TOGGLE = `.${CLASS_TOGGLE}`;
@@ -64,12 +66,12 @@
             $container.innerHTML = `
 <button class="${CLASS_TOGGLE}">${ICON_TOGGLE}</button>
 <div class="${CLASS_RESIZE}"></div>
-<article>
-    <header>
-        <div class="${CLASS_RESIZE}"></div>
+<article class="${CLASS_PANEL}">
+    <header class="${CLASS_HEADER}">
+        <button class="${CLASS_MINIMIZE}">${ICON_MINIMIZE}</button>
     </header>
-    <section>y</section>
-    <footer>z</footer>
+    <section>content</section>
+    <footer>footer</footer>
 </article>`;
         },
         initToggle: $el => {

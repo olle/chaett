@@ -53,9 +53,6 @@
     position: fixed;
 }
 
-.cht-minimize {
-    display: none;
-}
 .cht-resize {
     display: none;
     padding: 0;
@@ -63,10 +60,16 @@
     border: none;
     cursor: ew-resize;
     width: 0.4rem;
+    position: absolute;
     background: var(--cht-link);
 }
-.cht-resize > svg {
-    margin: 0;
+.cht-minimize {
+    display: none;
+}
+
+.cht-panel {
+    display: none;
+    min-width: 6rem;
 }
 
 @media (min-width: 768px) {
@@ -75,6 +78,12 @@
     }
     .cht-resize {
         display: block;
+    }
+    .cht-minimize {
+        display: initial;
+    }
+    .cht-panel {
+        display: initial;
     }
 }
 
