@@ -1,18 +1,20 @@
 (function (window) {
     const NAME = "Chaett";
+
     const PREFIX = "cht";
+    const pfx = str => `${PREFIX}${str}`;
 
     const STORAGE_KEY_THEME = "theme";
 
     const DARK_THEME = "dark";
     const LIGHT_THEME = "light";
 
-    const CLASS_CONTAINER = `${PREFIX}-container`;
-    const CLASS_DARK_THEME = `${PREFIX}--${DARK_THEME}-theme`;
-    const CLASS_LIGHT_THEME = `${PREFIX}--${LIGHT_THEME}-theme`;
-    const CLASS_TOGGLE = `${PREFIX}-toggle`;
-    const CLASS_RESIZE = `${PREFIX}-resize`;
-    const CLASS_WIDE = `${PREFIX}--is-wide`;
+    const CLASS_CONTAINER = pfx("-container");
+    const CLASS_DARK_THEME = pfx(`--${DARK_THEME}-theme`);
+    const CLASS_LIGHT_THEME = pfx(`--${LIGHT_THEME}-theme`);
+    const CLASS_TOGGLE = pfx("-toggle");
+    const CLASS_RESIZE = pfx("-resize");
+    const CLASS_MINIMIZE = pfx("-minimize");
 
     const SELECTOR_CONTAINER = `.${CLASS_CONTAINER}`;
     const SELECTOR_TOGGLE = `.${CLASS_TOGGLE}`;
@@ -25,6 +27,13 @@
 <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" />
 <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />
 </svg>`;
+    const ICON_MINIMIZE = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-minimize" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+<path d="M15 19v-2a2 2 0 0 1 2 -2h2" />
+<path d="M15 5v2a2 2 0 0 0 2 2h2" />
+<path d="M5 15h2a2 2 0 0 1 2 2v2" />
+<path d="M5 9h2a2 2 0 0 0 2 -2v-2" />
+</svg>`;
 
     const $body = window.document.querySelector("body");
 
@@ -32,28 +41,43 @@
 
     var store = {
         get: key => {
-            return window.localStorage.getItem(`${PREFIX}-${key}`);
+            return window.localStorage.getItem(pfx(key));
         },
         set: (key, value) => {
-            window.localStorage.setItem(`${PREFIX}-${key}`, value);
+            window.localStorage.setItem(pfx(key), value);
         },
     };
 
     var view = {
         init: () => {
+            view.initContainer();
+            view.initToggle($container.querySelector(SELECTOR_TOGGLE));
+            view.initResize($container.querySelector(SELECTOR_RESIZE));
+        },
+        initContainer: () => {
             if (!$container) {
                 $container = window.document.createElement("aside");
-                $container.classList.add(`${PREFIX}-container`);
+                $container.classList.add(CLASS_CONTAINER);
                 $body.appendChild($container);
             }
 
             $container.innerHTML = `
 <button class="${CLASS_TOGGLE}">${ICON_TOGGLE}</button>
-<div class="${CLASS_RESIZE}"></div>`;
-
-            $toggle = $container.querySelector(SELECTOR_TOGGLE);
-            // TODO: Handle toggle show/hide full-screen
-            $resize = $container.querySelector(SELECTOR_RESIZE);
+<div class="${CLASS_RESIZE}"></div>
+<article>
+    <header>
+        <div class="${CLASS_RESIZE}"></div>
+    </header>
+    <section>y</section>
+    <footer>z</footer>
+</article>`;
+        },
+        initToggle: $el => {
+            $el.addEventListener("click", evt => {
+                console.log("Toggling");
+            });
+        },
+        initResize: $el => {
             // TODO: Handle resize panel width.
         },
     };

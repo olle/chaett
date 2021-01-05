@@ -10,7 +10,6 @@
         "Helvetica Neue", sans-serif;
     --cht--container-fixed-top: 0;
     --cht--container-fixed-bottom: 0;
-    --cht--toggle-margin-top: 3rem;
 }
 
 .cht-container.cht--light-theme {
@@ -54,8 +53,8 @@
     position: fixed;
 }
 
-.cht-toggle {
-    margin-top: var(--cht--toggle-margin-top);
+.cht-minimize {
+    display: none;
 }
 .cht-resize {
     display: none;
