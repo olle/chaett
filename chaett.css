@@ -1,4 +1,8 @@
-:root {
+/*
+ * Declarations that are intended to be overridden, and easily adjustable
+ * by users.
+ */
+.cht-container {
     --cht--color-black: rgba(0, 0, 0, 0.9);
     --cht--color-white: rgba(255, 255, 255, 0.9);
     --cht--color-green-hue: 157;
@@ -10,6 +14,7 @@
         "Helvetica Neue", sans-serif;
     --cht--container-fixed-top: 0;
     --cht--container-fixed-bottom: 0;
+    --cht--container-z-index: 9999;
 }
 
 .cht-container.cht--light-theme {
@@ -30,7 +35,7 @@
     --cht-link: rgba(var(--cht--color-link-hue), 121, 187, 0.925);
 }
 
-/* Micro reset */
+/* Micro reset -------------------------------------------------------------- */
 
 .cht-container {
     box-sizing: border-box;
@@ -41,41 +46,87 @@
     box-sizing: inherit;
 }
 
-/* Main layout. */
+/* Icon styles -------------------------------------------------------------- */
 
+.cht-container .icon-tabler {
+    stroke: var(--cht-fg);
+}
+.cht-container.cht--light-theme .icon-tabler {
+    stroke-width: 1.4;
+}
+.cht-container.cht--dark-theme .icon-tabler {
+    stroke-width: 1.6;
+}
+
+/* LAYOUT =================================================================== */
+
+/*
+ * The main container, wraps **all** elements of the aside-chat, allowing for 
+ * a consistent scope for styling. The container will also control the offset
+ * and margins, that can be customized. It also defines the width of the chat
+ * window.
+ */
 .cht-container {
-    background: pink;
     color: var(--cht-fg);
     font-family: var(--cht--font-family);
     top: var(--cht--container-fixed-top);
     bottom: var(--cht--container-fixed-bottom);
     right: 0;
     position: fixed;
+    z-index: var(--cht--container-z-index);
+    width: 324px; /* DEBUG, TODO: Recover from storage. */
+    display: flex;
+    flex-direction: row;
 }
 
 .cht-resize {
-    display: none;
+    /*display: none;*/
     padding: 0;
     height: 100%;
     border: none;
     cursor: ew-resize;
     width: 0.4rem;
-    position: absolute;
+    border-radius: 1px;
+    background: var(--cht-bg);
+}
+.cht-container > .cht-resize:hover {
     background: var(--cht-link);
 }
 .cht-minimize {
-    display: none;
+    border: none;
+    background: transparent;
 }
 
-.cht-panel {
-    display: none;
-    min-width: 6rem;
+/*
+ * The main chat layout, encapsulating a header, content-area and a footer.
+ */
+.cht-window {
+    flex: 1;
+    background: var(--cht-bg);
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
 }
 
+.cht-window .cht-header {
+    background: var(--cht-bg); /* DEBUG */
+}
+.cht-window .cht-content {
+    flex: 1;
+}
+.cht-window .cht-footer {
+    background: lightblue; /* DEBUG */
+}
+
+/*
+ * Mobile-first, so we adapt the visual behavior accommodate a larger viewport
+ * by `min-width` rules.
+ */
 @media (min-width: 768px) {
     .cht-toggle {
         display: none;
     }
+    /*
     .cht-resize {
         display: block;
     }
@@ -85,17 +136,5 @@
     .cht-panel {
         display: initial;
     }
-}
-
-/* Icon styling */
-
-.cht-container .icon-tabler {
-    stroke: var(--cht-fg);
-}
-
-.cht-container.cht--light-theme .icon-tabler {
-    stroke-width: 1.4;
-}
-.cht-container.cht--dark-theme .icon-tabler {
-    stroke-width: 1.6;
+    */
 }

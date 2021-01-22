@@ -4,6 +4,8 @@
     const PREFIX = "cht";
     const pfx = str => `${PREFIX}${str}`;
 
+    const CONTAINER_MIN_WIDTH = 256; /* px */
+
     const STORAGE_KEY_THEME = "theme";
 
     const DARK_THEME = "dark";
@@ -14,27 +16,45 @@
     const CLASS_LIGHT_THEME = pfx(`--${LIGHT_THEME}-theme`);
     const CLASS_TOGGLE = pfx("-toggle");
     const CLASS_RESIZE = pfx("-resize");
+    const CLASS_MAXIMIZE = pfx("-maximize");
     const CLASS_MINIMIZE = pfx("-minimize");
-    const CLASS_PANEL = pfx("-panel");
+    const CLASS_WINDOW = pfx("-window");
     const CLASS_HEADER = pfx("-header");
+    const CLASS_CONTENT = pfx("-content");
+    const CLASS_FOOTER = pfx("-footer");
 
     const SELECTOR_CONTAINER = `.${CLASS_CONTAINER}`;
     const SELECTOR_TOGGLE = `.${CLASS_TOGGLE}`;
     const SELECTOR_RESIZE = `.${CLASS_RESIZE}`;
+    const SELECTOR_MINIMIZE = `.${CLASS_MINIMIZE}`;
+    const SELECTOR_MAXIMIZE = `.${CLASS_MAXIMIZE}`;
 
     const MEDIA_QUERY_DARK_THEME = "(prefers-color-scheme: dark)";
+
+    const MOUSE_DOWN_EVT = "mousedown";
+    const MOUSE_MOVE_EVT = "mousemove";
+    const MOUSE_UP_EVT = "mouseup";
 
     const ICON_TOGGLE = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
 <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" />
 <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />
 </svg>`;
+
     const ICON_MINIMIZE = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-minimize" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
 <path d="M15 19v-2a2 2 0 0 1 2 -2h2" />
 <path d="M15 5v2a2 2 0 0 0 2 2h2" />
 <path d="M5 15h2a2 2 0 0 1 2 2v2" />
 <path d="M5 9h2a2 2 0 0 0 2 -2v-2" />
+</svg>`;
+
+    const ICON_MAXIMIZE = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-maximize" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+<path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
+<path d="M4 16v2a2 2 0 0 0 2 2h2" />
+<path d="M16 4h2a2 2 0 0 1 2 2v2" />
+<path d="M16 20h2a2 2 0 0 0 2 -2v-2" />
 </svg>`;
 
     const $body = window.document.querySelector("body");
@@ -53,8 +73,10 @@
     var view = {
         init: () => {
             view.initContainer();
-            view.initToggle($container.querySelector(SELECTOR_TOGGLE));
+            //view.initToggle($container.querySelector(SELECTOR_TOGGLE));
             view.initResize($container.querySelector(SELECTOR_RESIZE));
+            view.initMinimize($container.querySelector(SELECTOR_MINIMIZE));
+            view.initMaximize($container.querySelector(SELECTOR_MAXIMIZE));
         },
         initContainer: () => {
             if (!$container) {
@@ -65,13 +87,14 @@
 
             $container.innerHTML = `
 <button class="${CLASS_TOGGLE}">${ICON_TOGGLE}</button>
+<button class="${CLASS_MAXIMIZE}">${ICON_MAXIMIZE}</button>
 <div class="${CLASS_RESIZE}"></div>
-<article class="${CLASS_PANEL}">
+<article class="${CLASS_WINDOW}">
     <header class="${CLASS_HEADER}">
         <button class="${CLASS_MINIMIZE}">${ICON_MINIMIZE}</button>
     </header>
-    <section>content</section>
-    <footer>footer</footer>
+    <section class="${CLASS_CONTENT}">content</section>
+    <footer class="${CLASS_FOOTER}">footer</footer>
 </article>`;
         },
         initToggle: $el => {
@@ -80,7 +103,33 @@
             });
         },
         initResize: $el => {
-            // TODO: Handle resize panel width.
+            $el.addEventListener(MOUSE_DOWN_EVT, evt => {
+                evt.stopImmediatePropagation();
+                evt.preventDefault();
+                const originX = evt.clientX;
+                const originWidth = $container.clientWidth;
+                const onResize = evt => {
+                    var delta = originX - evt.clientX;
+                    var newWidth = Math.max(originWidth + delta, CONTAINER_MIN_WIDTH);
+                    $container.style.width = `${newWidth}px`;
+                };
+                const onFinished = () => {
+                    window.removeEventListener(MOUSE_MOVE_EVT, onResize);
+                    window.removeEventListener(MOUSE_UP_EVT, onFinished);
+                };
+                window.addEventListener(MOUSE_MOVE_EVT, onResize);
+                window.addEventListener(MOUSE_UP_EVT, onFinished);
+            });
+        },
+        initMinimize: $el => {
+            $el.addEventListener("click", evt => {
+                console.log("Min!");
+            });
+        },
+        initMaximize: $el => {
+            $el.addEventListener("click", evt => {
+                console.log("max!");
+            });
         },
     };
 
@@ -90,18 +139,13 @@
             if (storedTheme) {
                 theme.set(storedTheme);
             } else {
-                var preferredTheme = window.matchMedia(MEDIA_QUERY_DARK_THEME)
-                    .matches
-                    ? DARK_THEME
-                    : LIGHT_THEME;
+                var preferredTheme = window.matchMedia(MEDIA_QUERY_DARK_THEME).matches ? DARK_THEME : LIGHT_THEME;
                 theme.set(preferredTheme);
             }
-            window
-                .matchMedia(MEDIA_QUERY_DARK_THEME)
-                .addEventListener("change", evt => {
-                    var switchedTheme = evt.matches ? DARK_THEME : LIGHT_THEME;
-                    theme.set(switchedTheme);
-                });
+            window.matchMedia(MEDIA_QUERY_DARK_THEME).addEventListener("change", evt => {
+                var switchedTheme = evt.matches ? DARK_THEME : LIGHT_THEME;
+                theme.set(switchedTheme);
+            });
         },
         set: theme => {
             if (theme === DARK_THEME) {
