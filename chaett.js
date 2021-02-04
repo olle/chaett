@@ -1,19 +1,17 @@
 (function (window) {
     const NAME = "Chaett";
 
-    const PREFIX = "cht";
-    const pfx = str => `${PREFIX}${str}`;
+    const pfx = str => `cht${str}`;
 
     const CONTAINER_MIN_WIDTH = 256; /* px */
-
     const STORAGE_KEY_THEME = "theme";
 
-    const DARK_THEME = "dark";
-    const LIGHT_THEME = "light";
+    const THEME_DARK = "dark";
+    const THEME_LIGHT = "light";
 
     const CLASS_CONTAINER = pfx("-container");
-    const CLASS_DARK_THEME = pfx(`--${DARK_THEME}-theme`);
-    const CLASS_LIGHT_THEME = pfx(`--${LIGHT_THEME}-theme`);
+    const CLASS_THEME_DARK = pfx(`--${THEME_DARK}-theme`);
+    const CLASS_THEME_LIGHT = pfx(`--${THEME_LIGHT}-theme`);
     const CLASS_TOGGLE = pfx("-toggle");
     const CLASS_RESIZE = pfx("-resize");
     const CLASS_MAXIMIZE = pfx("-maximize");
@@ -29,7 +27,7 @@
     const SELECTOR_MINIMIZE = `.${CLASS_MINIMIZE}`;
     const SELECTOR_MAXIMIZE = `.${CLASS_MAXIMIZE}`;
 
-    const MEDIA_QUERY_DARK_THEME = "(prefers-color-scheme: dark)";
+    const MEDIA_QUERY_THEME_DARK = "(prefers-color-scheme: dark)";
 
     const MOUSE_DOWN_EVT = "mousedown";
     const MOUSE_MOVE_EVT = "mousemove";
@@ -139,21 +137,21 @@
             if (storedTheme) {
                 theme.set(storedTheme);
             } else {
-                var preferredTheme = window.matchMedia(MEDIA_QUERY_DARK_THEME).matches ? DARK_THEME : LIGHT_THEME;
+                var preferredTheme = window.matchMedia(MEDIA_QUERY_THEME_DARK).matches ? THEME_DARK : THEME_LIGHT;
                 theme.set(preferredTheme);
             }
-            window.matchMedia(MEDIA_QUERY_DARK_THEME).addEventListener("change", evt => {
-                var switchedTheme = evt.matches ? DARK_THEME : LIGHT_THEME;
+            window.matchMedia(MEDIA_QUERY_THEME_DARK).addEventListener("change", evt => {
+                var switchedTheme = evt.matches ? THEME_DARK : THEME_LIGHT;
                 theme.set(switchedTheme);
             });
         },
         set: theme => {
-            if (theme === DARK_THEME) {
-                $container.classList.remove(CLASS_LIGHT_THEME);
-                $container.classList.add(CLASS_DARK_THEME);
-            } else if (theme === LIGHT_THEME) {
-                $container.classList.remove(CLASS_DARK_THEME);
-                $container.classList.add(CLASS_LIGHT_THEME);
+            if (theme === THEME_DARK) {
+                $container.classList.remove(CLASS_THEME_LIGHT);
+                $container.classList.add(CLASS_THEME_DARK);
+            } else if (theme === THEME_LIGHT) {
+                $container.classList.remove(CLASS_THEME_DARK);
+                $container.classList.add(CLASS_THEME_LIGHT);
             }
         },
     };
