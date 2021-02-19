@@ -1,3 +1,5 @@
+import './chaett.css'
+
 (function (window) {
     const NAME = "Chaett";
 
