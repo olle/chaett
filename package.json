@@ -3,9 +3,12 @@
   "version": "0.0.1",
   "description": "Just chat stuff, no fluff.",
   "license": "MIT",
-  "browser": "chaett.js",
-  "style": "chaett.css",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^2.0.0"
   }
 }
