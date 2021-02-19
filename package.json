@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Just chat stuff, no fluff.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olle/chaett.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
