@@ -158,9 +158,31 @@ import './chaett.css'
         },
     };
 
+    const DEBOUNCE_TIMEOUT = 98;
+    var DEBOUNCE = false;
+
+    const events = {
+        init: () => {},
+        pub: (evt, props) => {
+            if (DEBOUNCE) {
+                clearTimeout(DEBOUNCE);
+            }
+            DEBOUNCE = setTimeout(() => {
+                var event = new CustomEvent(evt, { detail: props });
+                $container.dispatchEvent(event);
+            }, DEBOUNCE_TIMEOUT);
+        },
+        sub: (evt, handler) => {
+            $container.addEventListener(evt, ev => {
+                handler({ event: ev.type, ...ev.detail }, ev);
+            });
+        },
+    };
+
     setTimeout(() => {
         view.init();
         theme.init();
+        events.init();
     }, 42);
 
     window[NAME] = window[NAME] || {
