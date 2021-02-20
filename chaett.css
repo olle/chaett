@@ -87,12 +87,19 @@
     height: 100%;
     border: none;
     cursor: ew-resize;
-    width: .3rem;
+    width: 0.3rem;
     border-left: 1px solid transparent;
     background: var(--cht-bg);
 }
 .cht-container > .cht-resize:hover {
     border-left-color: var(--cht-link);
+}
+
+/*
+ * Toggling button is a side-tab, that allows the user to toggle the window
+ * into a visible state.
+ */
+.cht-toggle {
 }
 
 .cht-minimize {

@@ -1,4 +1,4 @@
-import './chaett.css'
+import "./chaett.css";
 
 (function (window) {
     const NAME = "Chaett";
@@ -7,6 +7,7 @@ import './chaett.css'
 
     const CONTAINER_MIN_WIDTH = 256; /* px */
     const STORAGE_KEY_THEME = "theme";
+    const STORAGE_KEY_WIDTH = "width";
 
     const THEME_DARK = "dark";
     const THEME_LIGHT = "light";
@@ -34,6 +35,8 @@ import './chaett.css'
     const MOUSE_DOWN_EVT = "mousedown";
     const MOUSE_MOVE_EVT = "mousemove";
     const MOUSE_UP_EVT = "mouseup";
+
+    const X_RESIZED_EVT = "x-resized";
 
     const ICON_TOGGLE = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -63,22 +66,28 @@ import './chaett.css'
 
     var store = {
         get: key => {
-            return window.localStorage.getItem(pfx(key));
+            return window.localStorage.getItem(pfx("-" + key));
         },
         set: (key, value) => {
-            window.localStorage.setItem(pfx(key), value);
+            window.localStorage.setItem(pfx("-" + key), value);
         },
     };
 
     var view = {
         init: () => {
-            view.initContainer();
-            //view.initToggle($container.querySelector(SELECTOR_TOGGLE));
+            var width = store.get(STORAGE_KEY_WIDTH) || CONTAINER_MIN_WIDTH;
+            view.initContainer(width);
+
+            view.initToggle($container.querySelector(SELECTOR_TOGGLE));
             view.initResize($container.querySelector(SELECTOR_RESIZE));
             view.initMinimize($container.querySelector(SELECTOR_MINIMIZE));
             view.initMaximize($container.querySelector(SELECTOR_MAXIMIZE));
+
+            events.sub(X_RESIZED_EVT, evt => {
+                store.set(STORAGE_KEY_WIDTH, evt.width);
+            });
         },
-        initContainer: () => {
+        initContainer: width => {
             if (!$container) {
                 $container = window.document.createElement("aside");
                 $container.classList.add(CLASS_CONTAINER);
@@ -96,8 +105,11 @@ import './chaett.css'
     <section class="${CLASS_CONTENT}">content</section>
     <footer class="${CLASS_FOOTER}">footer</footer>
 </article>`;
+
+            $container.style.width = `${width}px`;
         },
         initToggle: $el => {
+            console.log("TOGGLER", $el);
             $el.addEventListener("click", evt => {
                 console.log("Toggling");
             });
@@ -112,6 +124,7 @@ import './chaett.css'
                     var delta = originX - evt.clientX;
                     var newWidth = Math.max(originWidth + delta, CONTAINER_MIN_WIDTH);
                     $container.style.width = `${newWidth}px`;
+                    events.pub(X_RESIZED_EVT, { width: newWidth });
                 };
                 const onFinished = () => {
                     window.removeEventListener(MOUSE_MOVE_EVT, onResize);
