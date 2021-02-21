@@ -5,6 +5,7 @@ import "./chaett.css";
 
     const pfx = str => `cht${str}`;
 
+    const CONTAINER_RIM_WIDTH = 40; /* px */
     const CONTAINER_MIN_WIDTH = 256; /* px */
     const STORAGE_KEY_THEME = "theme";
     const STORAGE_KEY_WIDTH = "width";
@@ -31,6 +32,7 @@ import "./chaett.css";
     const SELECTOR_MAXIMIZE = `.${CLASS_MAXIMIZE}`;
 
     const MEDIA_QUERY_THEME_DARK = "(prefers-color-scheme: dark)";
+    const MEDIA_QUERY_LARGE_VIEW = "(min-width: 480px)";
 
     const MOUSE_DOWN_EVT = "mousedown";
     const MOUSE_MOVE_EVT = "mousemove";
@@ -75,8 +77,14 @@ import "./chaett.css";
 
     var view = {
         init: () => {
-            var width = store.get(STORAGE_KEY_WIDTH) || CONTAINER_MIN_WIDTH;
-            view.initContainer(width);
+            var large = window.matchMedia(MEDIA_QUERY_LARGE_VIEW);
+
+            if (large.matches) {
+                var width = store.get(STORAGE_KEY_WIDTH) || CONTAINER_MIN_WIDTH;
+                view.initContainer(width);
+            } else {
+                view.initContainer(CONTAINER_RIM_WIDTH);
+            }
 
             view.initToggle($container.querySelector(SELECTOR_TOGGLE));
             view.initResize($container.querySelector(SELECTOR_RESIZE));
@@ -192,11 +200,13 @@ import "./chaett.css";
         },
     };
 
+    const INIT_TIMEOUT = 42;
+
     setTimeout(() => {
         view.init();
         theme.init();
         events.init();
-    }, 42);
+    }, INIT_TIMEOUT);
 
     window[NAME] = window[NAME] || {
         store: store,
