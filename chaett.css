@@ -103,7 +103,7 @@
 }
 
 .cht-minimize {
-    display: none;
+    /*display: none;*/
     border: none;
     background: transparent;
 }
